@@ -95,7 +95,15 @@ class _DashboardViewState extends State<DashboardView> {
                                 ),
                                 getWidget(value: profile.gender?.index == 1 ? 'Male' : 'Female'),
                                 getWidget(value: getDob(profile.dob)),
-                                getWidget(value: profile.bio, showIfNull: true),
+                                Container(
+                                  height: 50,
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Text(
+                                    '${profile.bio}',
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                ),
                                 getWidget(value: profile.photos![0].type),
                               ],
                             ),
