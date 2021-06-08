@@ -3,7 +3,7 @@
        <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:usesCleartextTraffic="true"
-        android:label="test_task"
+        android:label="boop date"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

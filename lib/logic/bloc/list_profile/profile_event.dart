@@ -1,4 +1,4 @@
-part of 'listprofile_bloc.dart';
+part of 'profile_bloc.dart';
 
 abstract class ProfileEvent extends Equatable {
   const ProfileEvent();

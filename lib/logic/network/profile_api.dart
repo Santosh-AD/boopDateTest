@@ -1,3 +1,4 @@
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:graphql/client.dart';
 import 'package:test_task/core/lang.dart';
 import 'package:test_task/logic/model/exception_model.dart';
@@ -5,7 +6,7 @@ import 'package:test_task/logic/model/list_profile_response_model.dart';
 import 'package:test_task/logic/network/base_network.dart';
 import 'package:test_task/logic/network/base_network_status.dart';
 import 'package:test_task/logic/network/graphql/graphql_client.dart';
-import 'package:test_task/logic/network/graphql/query_fields.dart';
+import 'package:test_task/logic/network/graphql/query_options.dart';
 
 //Comments
 class ProfileApi {

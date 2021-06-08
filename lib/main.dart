@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_task/logic/bloc/list_profile/listprofile_bloc.dart';
+import 'package:test_task/logic/bloc/list_profile/profile_bloc.dart';
 import 'package:test_task/logic/network/graphql/graphql_client.dart';
 import 'package:test_task/logic/network/profile_api.dart';
 import 'package:test_task/logic/repositories/profile_repo.dart';

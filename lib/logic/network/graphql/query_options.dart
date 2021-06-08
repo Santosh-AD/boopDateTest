@@ -1,3 +1,4 @@
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:graphql/client.dart';
 
 class QueryFields {
@@ -10,7 +11,7 @@ class QueryFields {
     bool lat: true,
     bool lng: true,
     bool name: true,
-    bool optin_marketing: true,
+    bool optinMarketing: true,
     bool photos: true,
     bool photosId: true,
     bool photosUrl: true,

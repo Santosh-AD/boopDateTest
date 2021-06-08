@@ -1,7 +1,10 @@
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_task/logic/bloc/list_profile/listprofile_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:test_task/core/colors.dart';
+import 'package:test_task/logic/bloc/list_profile/profile_bloc.dart';
 import 'package:test_task/logic/model/list_profile_response_model.dart';
 import 'package:test_task/presentation/widget/common_loading.dart';
 import 'package:test_task/presentation/widget/common_toasting.dart';
@@ -27,9 +30,12 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     profileBloc = BlocProvider.of<ProfileBloc>(context);
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: AppColor.appThemeColor,
         title: Text('Boop Date'),
       ),
       body: BlocListener<ProfileBloc, ProfileState>(
@@ -56,7 +62,12 @@ class _DashboardViewState extends State<DashboardView> {
                   child: Text('Retry'),
                 ),
               )
-            : ListView.builder(
+            : GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 8.0,
+                    childAspectRatio: (size.width / 2) / 305,
+                    mainAxisSpacing: 8.0),
                 shrinkWrap: true,
                 itemCount: data.length,
                 itemBuilder: (context, index) {
@@ -66,22 +77,29 @@ class _DashboardViewState extends State<DashboardView> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    margin: EdgeInsets.all(8.0),
                     child: Container(
-                      padding: EdgeInsets.all(8.0),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          getWidget(heading: "name", value: profile.name, showIfNull: true),
-                          getWidget(
-                              heading: "gender",
-                              value: profile.gender?.index == 1 ? 'Male' : 'Female'),
-                          getWidget(heading: "dob", value: profile.dob),
-                          getWidget(heading: "bio", value: profile.bio, showIfNull: true),
-                          getWidget(heading: "PhotoId 1st", value: profile.photos![0].id),
-                          getWidget(heading: "PhotoType 1st Type", value: profile.photos![0].type),
-                          getWidget(heading: "PhotoType 1st URL", value: profile.photos![0].url),
                           getPhoto(profile.photos![0].url),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Text(
+                                    '${profile.name}',
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19.0),
+                                  ),
+                                ),
+                                getWidget(value: profile.gender?.index == 1 ? 'Male' : 'Female'),
+                                getWidget(value: getDob(profile.dob)),
+                                getWidget(value: profile.bio, showIfNull: true),
+                                getWidget(value: profile.photos![0].type),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -91,15 +109,15 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Widget getWidget({required String heading, dynamic? value, bool showIfNull: false}) {
+  Widget getWidget({dynamic? value, bool showIfNull: false}) {
     if (value != null || showIfNull) {
       return Container(
-        margin: EdgeInsets.all(4.0),
         padding: EdgeInsets.all(4.0),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
+        child: Text(
+          '$value',
+          overflow: TextOverflow.ellipsis,
+          maxLines: 3,
         ),
-        child: Text('$heading: $value'),
       );
     } else {
       return Container();
@@ -108,25 +126,50 @@ class _DashboardViewState extends State<DashboardView> {
 
   getPhoto(String? url) {
     print(url);
-    return CachedNetworkImage(
-      imageUrl: url,
-      placeholder: (context, url) => Container(
-        height: 100,
-        width: 80,
-        child: Center(
-          child: CircularProgressIndicator(),
+    return Stack(
+      children: [
+        Opacity(
+          opacity: 0.8,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 130,
+            color: AppColor.appThemeColor,
+          ),
         ),
-      ),
-      errorWidget: (context, url, error) => Container(
-        height: 100,
-        width: 80,
-        child: Center(
-          child: Text(error),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.only(top: 15.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: CachedNetworkImage(
+                imageUrl: url,
+                placeholder: (context, url) => Container(
+                  height: 100,
+                  width: 80,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Container(
+                  height: 100,
+                  width: 80,
+                  color: Colors.grey,
+                ),
+                height: 100,
+                width: 100,
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
         ),
-      ),
-      height: 100,
-      width: 100,
-      fit: BoxFit.fill,
+      ],
     );
+  }
+
+  getDob(DateTime? dob) {
+    String? str = DateFormat('dd-MMMM-y').format(dob!);
+    print(str);
+    return str;
   }
 }

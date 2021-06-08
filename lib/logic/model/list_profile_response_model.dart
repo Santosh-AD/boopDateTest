@@ -2,8 +2,6 @@
 //
 //     final listProfileResponseModel = listProfileResponseModelFromJson(jsonString);
 
-import 'dart:convert';
-
 
 
 class Data {
